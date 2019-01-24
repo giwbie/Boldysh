@@ -1,93 +1,56 @@
-package HomeTask_Lesson_2;
-
-import java.util.Scanner;
-
-public class Task_1 {
+public class NextDate {
 
     public static void main(String[] args) {
-        Scanner scan = new Scanner(System.in);
-        int day = scan.nextInt();
-        int month = scan.nextInt();
-        int year = scan.nextInt();
+        Scanner reader = new Scanner(System.in);
 
-        if (day > 31 || day < 1 || month > 12 || month < 1) {
-            System.out.println("Information incorrect");
-        } else if (month == 2 && day >= 30) {
-            System.out.println("Information incorrect");
-        } else if ((month == 4 && day > 30) || (month == 6 && day == 30)) {
-            System.out.println("Information incorrect");
-        } else if ((month == 9 && day > 30) || (month == 11 && day > 30)) {
-            System.out.println("Information incorrect");
-        } else {
-            System.out.println(izFollowDay(day, month, year));
+        System.out.println(">>> Enter the YEAR: ");
+        int year = reader.nextInt();
+
+        System.out.println(">>> Enter the MONTH (1-12)");
+        int month = reader.nextInt();
+        if (month < 1 || month > 12) {
+            System.out.println("!!!!!!!!! Entered month in INCORRECT. Program STOPPED");
+            return;
         }
+        
+        int monthNumDays = getMonthNumDays(year, month);
+        System.out.println(">>> Enter the day of month (1-" + monthNumDays + "):");
+        int day = reader.nextInt();
+        if (day < 1 || day > monthNumDays) {
+            System.out.println(
+                "!!!!!!!!! Entered day in INCORRECT. Day of month should be 1-" + monthNumDays + ". Program  STOPPED");
+            return;
+        }
+
+        String nextDate = getNextDate(year, month, day, monthNumDays);
+        System.out.println("Entered date: " + day + "." + month + "." + year + ". Next date => " + nextDate);
+
     }
 
-    public static int izLeapYear(int year) {
-        int maxDayMonthTwo;
-
-        if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)) {
-            maxDayMonthTwo = 29;
-        } else {
-            maxDayMonthTwo = 28;
-        }
-        return maxDayMonthTwo;
-    }
-
-    public static int izMaxDayMonth(int month, int year) {
-        int maxDayMonth;
-        if (month == 2) {
-            maxDayMonth = izLeapYear(year);
-        } else if (month == 3 || month == 6 || month == 9 || month == 11) {
-            maxDayMonth = 30;
-        } else {
-            maxDayMonth = 31;
-        }
-        return maxDayMonth;
-    }
-
-    public static String izFollowDay(int day, int month, int year) {
-        day += 1;
-        if (day > izMaxDayMonth(month, year)) {
-            day = 1;
-            month++;
-            if (month > 12) {
-                month = 1;
-                year += 1;
-            }
-        }
-        return String.valueOf(day + "." + month + "." + year);
-    }
-}
- /* switch (month) {
-            case 2:
-                if (year % 4 == 0 && year % 100 != 0 || year % 400 == 0) {
-                    maxDateMonth = 29;
-                } else {
-                    maxDateMonth = 28;
-                }
-                break;
+    private static int getMonthNumDays(int year, int month) {
+        switch (month) {
             case 4:
             case 6:
             case 9:
             case 11:
-                maxDateMonth = 30;
-                break;
+                return 30;
+            case 2:
+                if (((year % 4 == 0) && !(year % 100 == 0)) || (year % 400 == 0)) { // Leap year
+                    return 29;
+                }
+                return 28;
             default:
-                maxDateMonth = 31;
-                break;
         }
+        return 31;
+    }
 
-        if (date > maxDateMonth) {
-            date = 1;
-            month++;
-            if (month > 12) {
-                month = 1;
-                year += 1;
-                System.out.println(date + "." + month + "." + year);
-            } else {
-                System.out.println(date + "." + month + "." + year);
+    private static String getNextDate(int year, int month, int day, int monthNumDays) {
+        if (day == monthNumDays) {
+            if (month == 12) {
+                return "1.1." + (year + 1);
             }
-        } else {
-            System.out.println(date + "." + month + "." + year);
-        }*/
+            return "1." + (month + 1) + "." + year;
+        }
+        return (day + 1) + "." + month + "." + year;
+    }
+}
